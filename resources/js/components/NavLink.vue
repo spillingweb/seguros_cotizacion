@@ -16,7 +16,7 @@ const props = defineProps<NavLinkProps>();
     <li>
         <RouterLink
             :to="props.to"
-            class="py-1 rounded-md cursor-pointer text-sm sm:text-md text-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-3 group relative tracking-wide uppercase"
+            class="py-1 rounded-md cursor-pointer text-sbase sm:text-md text-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-3 group relative tracking-wide"
            :class="route.name === props.activeRouteName ? 'font-semibold' : ''"
            :aria-current="
                 route.name === props.activeRouteName ? 'page' : undefined

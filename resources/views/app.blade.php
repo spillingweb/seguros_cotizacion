@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Seguro de Viaje</title>
+    <link rel="icon" href="/favicon.png" />
     @vite(['resources/css/app.css', 'resources/js/app.ts'])
 </head>
 <body>

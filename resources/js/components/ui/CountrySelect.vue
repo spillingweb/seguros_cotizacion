@@ -63,7 +63,7 @@ const groupedOptions = computed(() => {
             <SelectTrigger
                 class="w-full"
             >
-                <SelectValue :placeholder="placeholder ? placeholder : 'Adónde viajas?'" />
+                <SelectValue placeholder="Seleccione un país" />
             </SelectTrigger>
             <SelectContent>
                 <template v-for="[region, regionOptions] in groupedOptions" :key="region">

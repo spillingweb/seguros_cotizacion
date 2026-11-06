@@ -21,6 +21,7 @@
     "dependencies": {
         "@internationalized/date": "^3.12.4",
         "@lucide/vue": "^1.69.0",
+        "@tanstack/vue-form": "^1.33.5",
         "@tanstack/vue-query": "^5.106.1",
         "@vitejs/plugin-vue": "^6.0.10",
         "@vueuse/core": "^15.0.0",

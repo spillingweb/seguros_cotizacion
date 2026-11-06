@@ -33,7 +33,7 @@ const id = `input-${Math.random().toString(36).slice(2, 9)}`;
         />
         <FieldLabel
             :for="id"
-            class="absolute w-fit! px-1 top-3 text-md left-3 text-muted-foreground peer-focus:-top-1.5 peer-focus:left-2 peer-focus:bg-white peer-focus:text-xs peer-not-placeholder-shown:-top-1.5 peer-not-placeholder-shown:left-2 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:text-xs transition-all duration-200"
+            class="absolute w-fit! px-1 top-3 text-base left-3 text-muted-foreground peer-focus:-top-2 peer-focus:left-2 peer-focus:bg-white peer-focus:text-xs peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:left-2 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:text-xs transition-all duration-200"
         >
             {{ label }}
             <span v-if="required" aria-label="campo requerido">*</span>

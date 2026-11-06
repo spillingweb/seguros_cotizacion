@@ -11,7 +11,7 @@ const { error } = defineProps<Props>();
     <div
         v-if="error"
         role="alert"
-        class="rounded-lg bg-red-50 border border-red-200 p-4 text-sm text-red-700"
+        class="rounded-lg bg-red-50 border border-red-200 p-4 text-xs text-red-700"
     >
         {{ error }}
     </div>

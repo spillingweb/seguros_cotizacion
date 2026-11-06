@@ -1,8 +1,9 @@
 export interface Country {
-    flags: { svg: string };
+    name: string;
+    code: string;
     region: string;
-    translations: { es: string };
-    alpha2Code: string;
+    flag: string | null;
+    surcharge_percentage: number;
 }
 
 export type InsuranceStatus = "quoted" | "contracted";

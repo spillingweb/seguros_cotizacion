@@ -120,7 +120,7 @@ app/
 
 ### Integración con REST Countries
 
-`CountryService` consulta `restcountries.com/v3.1/all` y cachea la respuesta **24 horas** (`Cache::remember`). Maneja: timeout 10 s, errores 5xx, respuestas no-array, y cualquier excepción de red — todo envuelto en `CountryServiceException`. El frontend cachea también 24 h con Tanstack Query → normalmente **una sola petición** al API externo por día.
+`CountryService` consulta `countries.dev/countries` y cachea la respuesta **24 horas** (`Cache::remember`). Maneja: timeout 10 s, errores 5xx, respuestas no-array, y cualquier excepción de red — todo envuelto en `CountryServiceException`. Además normaliza el contrato para el frontend e incluye el `surcharge_percentage` por región. El frontend cachea también 24 h con Tanstack Query.
 
 ### Lógica de precios
 
@@ -188,4 +188,3 @@ resources/js/
 - **Caché Redis**: reemplazar `file` en producción para escalado horizontal.
 - **Validación de edad mínima**: asegurado ≥ 18 años.
 - **Multi-idioma**: Vue I18n para otros mercados.
-
