@@ -1,0 +1,16 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "jsx": "preserve",
+    "paths": {
+      "@/*": ["./resources/js/*"]
+    },
+    "types": ["vite/client", "node"],
+    "skipLibCheck": true
+  },
+  "include": ["resources/js/**/*.ts", "resources/js/**/*.vue", "resources/js/env.d.ts", "vite.config.ts"]
+}
