@@ -141,23 +141,36 @@ Total = días × $3 + (días × $3 × recargo_región)
 
 ```
 resources/js/
-├── stores/insurance.ts          ← Pinia: cotización activa en memoria
+├── app.ts                       ← entrada principal (Vue + plugins)
+├── router/index.ts              ← Vue Router: rutas SPA
+├── stores/
+│   └── insurance.ts             ← Pinia: cotización activa en memoria
 ├── composables/
 │   ├── useCountries.ts          ← Tanstack Query: GET /api/countries (caché 24h)
-│   └── useInsurances.ts         ← Tanstack Query: lista + mutations crear/contratar
-├── components/
-│   ├── layout/AppHeader.vue     ← nav con aria-current
-│   ├── ui/                      ← AppButton, AppInput, AppSelect, StatusBadge
-│   ├── quote/
-│   │   ├── QuoteForm.vue        ← Laravel Precognition: validación en tiempo real
-│   │   └── QuoteSummary.vue     ← resumen + contratar + descargar PDF
-│   └── insurance/
-│       └── InsuranceTable.vue   ← tabla desktop + tarjetas mobile + búsqueda + paginación
+│   ├── useInsurances.ts         ← Tanstack Query: lista paginada + infinite scroll + mutations
+│   └── useQuoteForm.ts          ← Tanstack Form: estado, submit y sync de errores backend
+├── schemas/
+│   └── quoteFormSchema.ts       ← Zod: reglas del formulario de cotización
+├── lib/
+│   ├── api.ts                   ← instancia Axios configurada
+│   └── utils.ts                 ← helpers de fecha, moneda y validación
+├── views/
+│   ├── QuoteView.vue            ← página de cotización
+│   └── InsurancesView.vue       ← página de gestión de seguros
+└── components/
+    ├── AppHeader.vue            ← nav principal con aria-current
+    ├── NavLink.vue              ← enlace de navegación activo/inactivo
+    ├── QuoteForm.vue            ← formulario completo + validación de campos
+    ├── QuoteSummary.vue         ← resumen de cotización + contratar
+    ├── InsuranceTable.vue       ← tabla desktop (paginada) + tarjetas mobile (infinite scroll)
+    └── ui/                      ← AppButton, AppInput, CountrySelect, ErrorMessage, StatusBadge, …
 ```
 
-**Laravel Precognition** (`laravel-precognition-vue`): el formulario valida contra el servidor mientras el usuario escribe, sin necesidad de submit. El middleware `HandlePrecognitiveRequests` en la ruta `POST /api/quotes` intercepta los HEAD preflight requests.
-
 **Tanstack Query**: gestiona caché, estados de carga, deduplicación e invalidación automática al crear/contratar. No es necesario manejar estado de loading manualmente.
+
+**Infinite scroll (mobile)**: `useInsurancesInfinite` usa `useInfiniteQuery` para acumular páginas conforme el usuario desplaza. Un elemento sentinel de 1 px al pie de las tarjetas es observado con `useIntersectionObserver` de VueUse; cuando entra al viewport se llama `fetchNextPage()`. En pantallas `sm:` y mayores se mantiene la paginación clásica con botones.
+
+**Tanstack Form + Zod**: `useQuoteForm` centraliza el estado y envío del formulario. `quoteFormSchema` define las reglas de validación (incluyendo validaciones entre campos como fechas). En respuestas `422`, los errores de Laravel se mapean al `form.state.meta` de Tanstack para mostrarse debajo del input correspondiente.
 
 **Pinia**: almacena la cotización activa en memoria para que el resumen persista sin recargar datos innecesariamente.
 
@@ -171,6 +184,9 @@ resources/js/
 | DTOs `readonly` | Evitan mutación accidental de resultados de negocio |
 | Enum `InsuranceStatus` | Type-safety, casting Eloquent automático, labels en español |
 | Tanstack Query | Caché automático, deduplicación, estados declarativos — evita boilerplate de Axios |
+| `useInfiniteQuery` (infinite scroll) | Acumula páginas en mobile sin recargar; sentinel + IntersectionObserver evita polling |
+| Tanstack Form | Estado y validación del formulario con API declarativa y tipada |
+| Zod schema (`quoteFormSchema`) | Reglas de validación centralizadas y reutilizables en frontend |
 | Pinia (setup store) | Minimalista, tipo-seguro, sin mutaciones explícitas |
 | Tailwind v4 CSS-first | Sin `tailwind.config.js`; configuración en CSS con `@theme` |
 | Docker multi-servicio | Entorno reproducible; MySQL 8 + Nginx + PHP-FPM |

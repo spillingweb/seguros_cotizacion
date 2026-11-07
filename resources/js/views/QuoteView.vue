@@ -20,7 +20,7 @@ function onNewQuote() {
 </script>
 
 <template>
-    <div class="flex-1 overflow-auto mx-auto max-w-5xl px-4 py-8 sm:px-6">
+    <div class="flex-1 overflow-auto mx-auto max-w-5xl p-4 sm:py-8 sm:px-6">
         <div class="my-8">
             <div class="inline-flex items-center gap-2 text-chart-4 text-xs uppercase tracking-wider">
                 <Sparkles :size="14" />
@@ -34,22 +34,11 @@ function onNewQuote() {
             </p>
         </div>
 
-        <Transition
-            enter-active-class="transition-all duration-300"
-            enter-from-class="opacity-0 translate-y-2"
-            enter-to-class="opacity-100 translate-y-0"
-            leave-active-class="transition-all duration-200"
-            leave-from-class="opacity-100 translate-y-0"
-            leave-to-class="opacity-0 -translate-y-2"
-            mode="out-in"
-        >
+        <Transition enter-active-class="transition-all duration-300" enter-from-class="opacity-0 translate-y-2"
+            enter-to-class="opacity-100 translate-y-0" leave-active-class="transition-all duration-200"
+            leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 -translate-y-2" mode="out-in">
             <QuoteForm v-if="showForm" @quoted="onQuoted" />
-            <QuoteSummary
-                v-else-if="insurance"
-                :insurance="insurance"
-                @new-quote="onNewQuote"
-                @contracted="() => {}"
-            />
+            <QuoteSummary v-else-if="insurance" :insurance="insurance" @new-quote="onNewQuote" @contracted="() => { }" />
         </Transition>
     </div>
 </template>

@@ -82,7 +82,6 @@ const selectedLabel = computed(() => {
             "
             @blur="field.handleBlur"
             v-bind="$attrs"
-            :disabled="loading"
             :aria-invalid="isInvalid"
             :aria-describedby="isInvalid ? `${field.name}-error` : undefined"
             :aria-busy="loading"
@@ -117,7 +116,6 @@ const selectedLabel = computed(() => {
                 </template>
             </SelectContent>
         </Select>
-        <Spinner v-if="loading" class="size-4" />
         <FieldLabel
             class="absolute w-fit! px-1 text-muted-foreground -top-1.5 left-2 bg-white text-xs"
         >

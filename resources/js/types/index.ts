@@ -51,6 +51,12 @@ export interface PaginatedResponse<T> {
     };
 }
 
+export interface InsuranceStats {
+    total_quoted: number;
+    total_contracted: number;
+    total_amount: number;
+}
+
 export interface QuoteFormData {
     first_name: string;
     last_name: string;

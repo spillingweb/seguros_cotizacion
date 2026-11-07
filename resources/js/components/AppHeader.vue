@@ -6,20 +6,20 @@ const route = useRoute();
 </script>
 
 <template>
-    <header class="bg-white text-gray-900 shadow-lg" role="banner">
+    <header class="bg-primary text-primary-foreground shadow-lg" role="banner">
         <nav
-            class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6"
+            class="mx-auto flex max-w-5xl items-center px-4 py-4 sm:px-6"
             aria-label="Navegación principal"
         >
             <RouterLink
                 to="/"
-                class="flex items-center gap-2 text-xl font-bold tracking-tight hover:opacity-90 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2 rounded"
+                class="flex-1 flex items-center gap-2 text-xl font-bold tracking-tight hover:opacity-90 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2 rounded"
                 aria-label="Ir a inicio — Seguro de Viaje"
             >
                 <img
-                    src="../../images/gestion-segura-logo.png"
+                    src="../../images/gestion-segura-logo-light.png"
                     alt="Seguro de Viaje"
-                    class="h-10 w-auto"
+                    class="h-12 w-auto"
                 />
             </RouterLink>
 

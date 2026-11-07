@@ -104,7 +104,7 @@ function formatDate(dateStr: string): string {
                 </div>
             </template>
 
-            <div class="rounded-lg bg-muted border p-4 flex gap-4 items-start">
+            <div class="rounded-md bg-muted border p-4 flex gap-4 items-start">
                 <User2 class="size-10 text-primary" />
                 <div class="flex flex-col justify-center">
                     <div
@@ -123,7 +123,7 @@ function formatDate(dateStr: string): string {
                     </div>
                 </div>
             </div>
-            <div class="rounded-lg bg-muted border p-4 flex gap-4 items-start">
+            <div class="rounded-md bg-muted border p-4 flex gap-4 items-start">
                 <MapPin class="size-10 text-primary" />
                 <div class="flex flex-col justify-center">
                     <div
@@ -143,7 +143,7 @@ function formatDate(dateStr: string): string {
                 </div>
             </div>
             <div
-                class="rounded-lg bg-muted border p-4 text-muted-foreground flex gap-4 items-start"
+                class="rounded-md bg-muted border p-4 text-muted-foreground flex gap-4 items-start"
             >
                 <Calendar class="size-10 text-primary" />
                 <div class="flex flex-col justify-center">
@@ -173,7 +173,7 @@ function formatDate(dateStr: string): string {
                 </div>
             </div>
             <div
-                class="rounded-lg bg-primary text-white p-4 flex gap-4 items-start"
+                class="rounded-md bg-primary text-white p-4 flex gap-4 items-start"
             >
                 <CreditCardCheck class="size-10 text-white" />
                 <div class="flex flex-col justify-center">
