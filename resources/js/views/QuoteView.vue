@@ -20,7 +20,7 @@ function onNewQuote() {
 </script>
 
 <template>
-    <div class="flex-1 overflow-auto mx-auto max-w-6xl px-4 py-8 sm:px-6">
+    <div class="flex-1 overflow-auto mx-auto max-w-5xl px-4 py-8 sm:px-6">
         <div class="my-8">
             <div class="inline-flex items-center gap-2 text-chart-4 text-xs uppercase tracking-wider">
                 <Sparkles :size="14" />

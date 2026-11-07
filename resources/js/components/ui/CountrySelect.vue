@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Field from "./field/Field.vue";
-import FieldContent from "./field/FieldContent.vue";
 import FieldError from "./field/FieldError.vue";
 import FieldLabel from "./field/FieldLabel.vue";
 import Select from "./select/Select.vue";
@@ -12,6 +11,20 @@ import SelectTrigger from "./select/SelectTrigger.vue";
 import SelectValue from "./select/SelectValue.vue";
 import Spinner from "./spinner/Spinner.vue";
 import { computed } from "vue";
+
+type CountrySelectField = {
+    name: string;
+    state: {
+        value: string | undefined;
+        meta: {
+            isTouched: boolean;
+            isValid: boolean;
+            errors: Array<string | { message: string | undefined } | undefined>;
+        };
+    };
+    handleChange: (value: string | ((currentValue: string) => string)) => void;
+    handleBlur: () => void;
+};
 
 interface Option {
     value: string;
@@ -27,46 +40,65 @@ interface Props {
     error?: string;
     required?: boolean;
     loading?: boolean;
+    field: CountrySelectField;
 }
 
 const props = defineProps<Props>();
-const model = defineModel<string | undefined>({ required: true });
 const id = `select-${Math.random().toString(36).slice(2, 9)}`;
 
-// Group options by region
 const groupedOptions = computed(() => {
     const groups = new Map<string, Option[]>();
-    
+
     for (const option of props.options) {
         if (!groups.has(option.region)) {
             groups.set(option.region, []);
         }
         groups.get(option.region)!.push(option);
     }
-    
-    // Sort regions alphabetically
+
     return Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b));
+});
+
+const isInvalid = computed(
+    () => props.field.state.meta.isTouched && !props.field.state.meta.isValid,
+);
+
+const selectedLabel = computed(() => {
+    const value = props.field.state.value;
+    if (!value) return "";
+    return (
+        props.options.find((option) => option.value === value)?.label ?? value
+    );
 });
 </script>
 
 <template>
-    <Field class="relative">
+    <Field class="relative" :data-invalid="isInvalid">
         <Select
             :id="id"
-            v-model="model"
+            :model-value="field.state.value"
+            @update:model-value="
+                (value: unknown) => field.handleChange(String(value ?? ''))
+            "
+            @blur="field.handleBlur"
             v-bind="$attrs"
             :disabled="loading"
-            :aria-invalid="!!error"
-            :aria-describedby="error ? `${id}-error` : undefined"
+            :aria-invalid="isInvalid"
+            :aria-describedby="isInvalid ? `${field.name}-error` : undefined"
             :aria-busy="loading"
         >
-            <SelectTrigger
-                class="w-full"
-            >
-                <SelectValue placeholder="Seleccione un país" />
+            <SelectTrigger class="w-full">
+                <SelectValue :placeholder="placeholder ?? 'Seleccione un país'">
+                    <template v-if="selectedLabel">
+                        {{ selectedLabel }}
+                    </template>
+                </SelectValue>
             </SelectTrigger>
             <SelectContent>
-                <template v-for="[region, regionOptions] in groupedOptions" :key="region">
+                <template
+                    v-for="[region, regionOptions] in groupedOptions"
+                    :key="region"
+                >
                     <SelectGroup>
                         <SelectLabel>{{ region }}</SelectLabel>
                         <SelectItem
@@ -92,8 +124,10 @@ const groupedOptions = computed(() => {
             {{ label }}
             <span v-if="required" aria-label="campo requerido">*</span>
         </FieldLabel>
-        <FieldError v-if="error" :id="`${id}-error`">
-            {{ error }}
-        </FieldError>
+        <FieldError
+            v-if="isInvalid"
+            :id="`${field.name}-error`"
+            :errors="field.state.meta.errors"
+        />
     </Field>
 </template>
