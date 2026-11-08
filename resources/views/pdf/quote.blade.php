@@ -6,7 +6,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: DejaVu Sans, Arial, sans-serif; font-size: 12px; color: #1a1a2e; background: #fff; }
 
-    .header { background: #1a56db; color: #fff; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; }
+    .header { background: #223266; color: #fff; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; }
     .header h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
     .header .subtitle { font-size: 11px; opacity: 0.85; margin-top: 4px; }
     .badge { background: rgba(255,255,255,0.2); border-radius: 4px; padding: 4px 12px; font-size: 11px; font-weight: 600; }
@@ -18,7 +18,7 @@
     .doc-meta strong { color: #1a1a2e; }
 
     .section { margin-bottom: 22px; }
-    .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #1a56db; letter-spacing: 0.8px; border-bottom: 1.5px solid #e8f0fe; padding-bottom: 6px; margin-bottom: 12px; }
+    .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #223266; letter-spacing: 0.8px; border-bottom: 1.5px solid #e8f0fe; padding-bottom: 6px; margin-bottom: 12px; }
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
     .field label { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -27,7 +27,7 @@
     .pricing-box { background: #f0f5ff; border: 1px solid #c3d9fb; border-radius: 8px; padding: 16px 20px; }
     .pricing-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #dde8fb; }
     .pricing-row:last-child { border-bottom: none; }
-    .pricing-row.total { font-weight: 700; font-size: 14px; color: #1a56db; margin-top: 6px; padding-top: 10px; border-top: 2px solid #1a56db; border-bottom: none; }
+    .pricing-row.total { font-weight: 700; font-size: 14px; color: #223266; margin-top: 6px; padding-top: 10px; border-top: 2px solid #223266; border-bottom: none; }
 
     .status-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
     .status-quoted { background: #fef3c7; color: #92400e; }

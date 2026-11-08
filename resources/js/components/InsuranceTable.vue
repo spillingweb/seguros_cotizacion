@@ -20,7 +20,6 @@ import InputGroupInput from './ui/input-group/InputGroupInput.vue'
 import InputGroupAddon from './ui/input-group/InputGroupAddon.vue'
 import ErrorMessage from './ui/ErrorMessage.vue'
 import Card from './ui/card/Card.vue'
-import TableHeadStyled from './ui/TableHeadStyled.vue'
 
 const search = ref('')
 const statusFilter = ref('')
