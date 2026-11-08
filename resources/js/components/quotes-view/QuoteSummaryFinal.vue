@@ -5,27 +5,25 @@ import { useInsuranceStore } from "@/stores/insurance";
 import AppButton from "@/components/ui/AppButton.vue";
 import StatusBadge from "@/components/ui/StatusBadge.vue";
 import type { Insurance } from "@/types";
-import Card from "./ui/card/Card.vue";
+import Card from "../ui/card/Card.vue";
 import {
     Calendar,
     Check,
     CreditCardCheck,
     Download,
-    ExternalLink,
     MapPin,
     Undo2,
     User2,
 } from "@lucide/vue";
-import Dialog from "./ui/dialog/Dialog.vue";
-import DialogTrigger from "./ui/dialog/DialogTrigger.vue";
-import DialogClose from "./ui/dialog/DialogClose.vue";
-import DialogContent from "./ui/dialog/DialogContent.vue";
-import DialogHeader from "./ui/dialog/DialogHeader.vue";
-import DialogDescription from "./ui/dialog/DialogDescription.vue";
-import DialogFooter from "./ui/dialog/DialogFooter.vue";
-import DialogTitle from "./ui/dialog/DialogTitle.vue";
-import ErrorMessage from "./ui/ErrorMessage.vue";
-import { cn } from "cn";
+import Dialog from "../ui/dialog/Dialog.vue";
+import DialogTrigger from "../ui/dialog/DialogTrigger.vue";
+import DialogClose from "../ui/dialog/DialogClose.vue";
+import DialogContent from "../ui/dialog/DialogContent.vue";
+import DialogHeader from "../ui/dialog/DialogHeader.vue";
+import DialogDescription from "../ui/dialog/DialogDescription.vue";
+import DialogFooter from "../ui/dialog/DialogFooter.vue";
+import DialogTitle from "../ui/dialog/DialogTitle.vue";
+import ErrorMessage from "../ui/ErrorMessage.vue";
 
 interface Props {
     insurance: Insurance;

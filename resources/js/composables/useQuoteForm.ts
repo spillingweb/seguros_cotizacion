@@ -4,7 +4,7 @@ import { isAxiosError } from "axios";
 import { useCountries } from "@/composables/useCountries";
 import { useCreateQuote } from "@/composables/useInsurances";
 import { useInsuranceStore } from "@/stores/insurance";
-import { getTodayIso, toDateOnly } from "@/lib/utils";
+import { toDateOnly } from "@/lib/utils";
 import { quoteFormSchema } from "@/schemas/quoteFormSchema";
 import type { Country, QuoteFormData } from "@/types";
 
@@ -17,7 +17,11 @@ export function useQuoteForm(emit: (event: "quoted") => void) {
         isError: countriesError,
     } = useCountries();
 
-    const todayStr = computed(() => getTodayIso());
+    const todayStr = computed(() => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return today.toISOString().slice(0, 10);
+    });
 
     const defaultValues = {
         first_name: "",
@@ -101,6 +105,47 @@ export function useQuoteForm(emit: (event: "quoted") => void) {
         });
     };
 
+    const onSubmit = async ({ value }: { value: QuoteFormData }) => {
+        const payload = {
+            ...value,
+            destination_country: destinationCountryName.value,
+            destination_region: destinationRegion.value,
+        };
+        clearServerFieldErrors();
+
+        try {
+            const insurance = await createQuote.mutateAsync({ ...payload });
+            store.setCurrentQuote(insurance);
+            emit("quoted");
+        } catch (err: unknown) {
+            if (
+                isAxiosError<{
+                    message?: string;
+                    errors?: Record<string, string[]>;
+                }>(err) &&
+                err.response?.status === 422
+            ) {
+                const backendErrors = err.response.data?.errors ?? {};
+
+                Object.entries(backendErrors).forEach(([field, messages]) => {
+                    if (!isQuoteFormField(field)) return;
+
+                    const message =
+                        Array.isArray(messages) && messages.length > 0
+                            ? messages[0]
+                            : undefined;
+
+                    if (!message) return;
+                    setServerFieldError(field, message);
+                });
+                return;
+            }
+
+            console.error("Error inesperado al cotizar:", err);
+        }
+    };
+
+    // Form initiation
     const form = useForm({
         defaultValues,
         validators: {
@@ -108,47 +153,9 @@ export function useQuoteForm(emit: (event: "quoted") => void) {
         },
         validationLogic: revalidateLogic({
             mode: "submit",
-            modeAfterSubmission: "change"
+            modeAfterSubmission: "change",
         }),
-        onSubmit: async ({ value }) => {
-            const payload = {
-                ...value,
-                destination_country: destinationCountryName.value,
-                destination_region: destinationRegion.value,
-            };
-            clearServerFieldErrors();
-
-            try {
-                const insurance = await createQuote.mutateAsync({ ...payload });
-                store.setCurrentQuote(insurance);
-                emit("quoted");
-            } catch (err: unknown) {
-                if (
-                    isAxiosError<{
-                        message?: string;
-                        errors?: Record<string, string[]>;
-                    }>(err) &&
-                    err.response?.status === 422
-                ) {
-                    const backendErrors = err.response.data?.errors ?? {};
-
-                    Object.entries(backendErrors).forEach(([field, messages]) => {
-                        if (!isQuoteFormField(field)) return;
-
-                        const message =
-                            Array.isArray(messages) && messages.length > 0
-                                ? messages[0]
-                                : undefined;
-
-                        if (!message) return;
-                        setServerFieldError(field, message);
-                    });
-                    return;
-                }
-
-                console.error("Error inesperado al cotizar:", err);
-            }
-        },
+        onSubmit: onSubmit,
     });
 
     const countryOptions = computed(() =>
@@ -165,7 +172,9 @@ export function useQuoteForm(emit: (event: "quoted") => void) {
     );
 
     const selectedCountry = computed(() =>
-        countries.value?.find((country) => country.code === selectedCountryCode.value),
+        countries.value?.find(
+            (country) => country.code === selectedCountryCode.value,
+        ),
     );
 
     const destinationCountryName = computed(
@@ -190,24 +199,35 @@ export function useQuoteForm(emit: (event: "quoted") => void) {
         selectedCountryCode.value === "EC" ? "Nacional" : "Internacional",
     );
 
-    const departureDate = form.useSelector((state) => state.values.departure_date);
-    const returnDate = form.useSelector((state) => state.values.return_date);
-    const minReturnDate = computed(() => departureDate.value || todayStr.value);
-
-    watch(
-        departureDate,
-        (newDate) => {
-            if (!newDate) return;
-            if (
-                returnDate.value &&
-                toDateOnly(returnDate.value) <= toDateOnly(newDate)
-            ) {
-                const nextDay = new Date(toDateOnly(newDate));
-                nextDay.setDate(nextDay.getDate() + 1);
-                form.setFieldValue("return_date", nextDay.toISOString().slice(0, 10));
-            }
-        },
+    const departureDate = form.useSelector(
+        (state) => state.values.departure_date,
     );
+    const returnDate = form.useSelector((state) => state.values.return_date);
+    const minReturnDate = computed(() => {
+        const base = departureDate.value
+            ? toDateOnly(departureDate.value)
+            : toDateOnly(todayStr.value);
+
+        const minDate = new Date(base);
+        minDate.setDate(minDate.getDate() + 1);
+
+        return minDate.toISOString().slice(0, 10);
+    });
+
+    watch(departureDate, (newDate) => {
+        if (!newDate) return;
+        if (
+            returnDate.value &&
+            toDateOnly(returnDate.value) <= toDateOnly(newDate)
+        ) {
+            const nextDay = new Date(toDateOnly(newDate));
+            nextDay.setDate(nextDay.getDate() + 1);
+            form.setFieldValue(
+                "return_date",
+                nextDay.toISOString().slice(0, 10),
+            );
+        }
+    });
 
     const duration = computed(() => {
         if (!departureDate.value || !returnDate.value) return "";

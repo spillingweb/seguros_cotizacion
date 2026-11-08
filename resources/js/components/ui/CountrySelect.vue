@@ -9,7 +9,6 @@ import SelectItem from "./select/SelectItem.vue";
 import SelectLabel from "./select/SelectLabel.vue";
 import SelectTrigger from "./select/SelectTrigger.vue";
 import SelectValue from "./select/SelectValue.vue";
-import Spinner from "./spinner/Spinner.vue";
 import { computed } from "vue";
 
 type CountrySelectField = {
@@ -56,7 +55,9 @@ const groupedOptions = computed(() => {
         groups.get(option.region)!.push(option);
     }
 
-    return Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b));
+    return Array.from(groups.entries())
+        .map(([region, options]) => ({ region, options }))
+        .sort((a, b) => a.region.localeCompare(b.region, "es"));
 });
 
 const isInvalid = computed(
@@ -74,19 +75,11 @@ const selectedLabel = computed(() => {
 
 <template>
     <Field class="relative" :data-invalid="isInvalid">
-        <Select
-            :id="id"
-            :model-value="field.state.value"
-            @update:model-value="
-                (value: unknown) => field.handleChange(String(value ?? ''))
-            "
-            @blur="field.handleBlur"
-            v-bind="$attrs"
-            :aria-invalid="isInvalid"
-            :aria-describedby="isInvalid ? `${field.name}-error` : undefined"
-            :aria-busy="loading"
-        >
-            <SelectTrigger class="w-full">
+        <Select :model-value="field.state.value" @update:model-value="
+            (value: unknown) => field.handleChange(String(value ?? ''))
+        " @blur="field.handleBlur" v-bind="$attrs" :aria-invalid="isInvalid"
+            :aria-describedby="isInvalid ? `${field.name}-error` : undefined" :aria-busy="loading">
+            <SelectTrigger class="w-full" :id="id">
                 <SelectValue :placeholder="placeholder ?? 'Seleccione un país'">
                     <template v-if="selectedLabel">
                         {{ selectedLabel }}
@@ -94,38 +87,21 @@ const selectedLabel = computed(() => {
                 </SelectValue>
             </SelectTrigger>
             <SelectContent>
-                <template
-                    v-for="[region, regionOptions] in groupedOptions"
-                    :key="region"
-                >
+                <template v-for="group in groupedOptions" :key="group.region">
                     <SelectGroup>
-                        <SelectLabel>{{ region }}</SelectLabel>
-                        <SelectItem
-                            v-for="opt in regionOptions"
-                            :key="opt.value"
-                            :value="opt.value"
-                        >
-                            <img
-                                :src="opt.flag"
-                                :alt="'Bandera de ' + opt.label"
-                                class="inline-block w-4 h-4 mr-2"
-                            />
+                        <SelectLabel>{{ group.region }}</SelectLabel>
+                        <SelectItem v-for="opt in group.options" :key="opt.value" :value="opt.value">
+                            <img :src="opt.flag" :alt="'Bandera de ' + opt.label" class="inline-block w-4 h-4 mr-2" />
                             {{ opt.label }}
                         </SelectItem>
                     </SelectGroup>
                 </template>
             </SelectContent>
         </Select>
-        <FieldLabel
-            class="absolute w-fit! px-1 text-muted-foreground -top-2 left-2 bg-white text-xs"
-        >
+        <FieldLabel :htmlFor="id" class="absolute w-fit! px-1 text-muted-foreground font-medium -top-2 left-2 bg-white text-xs">
             {{ label }}
             <span v-if="required" aria-label="campo requerido">*</span>
         </FieldLabel>
-        <FieldError
-            v-if="isInvalid"
-            :id="`${field.name}-error`"
-            :errors="field.state.meta.errors"
-        />
+        <FieldError v-if="isInvalid" :id="`${field.name}-error`" :errors="field.state.meta.errors" />
     </Field>
 </template>

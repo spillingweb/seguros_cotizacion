@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import InsuranceTable from "@/components/InsuranceTable.vue";
+import InsuranceCardsList from "@/components/insurance-view/InsuranceCardsList.vue";
+import InsuranceStats from "@/components/insurance-view/InsuranceStats.vue";
+import InsuranceTable from "@/components/insurance-view/InsuranceTable.vue";
 import { FileText } from "@lucide/vue";
 </script>
 
@@ -15,7 +17,8 @@ import { FileText } from "@lucide/vue";
                 Historial de cotizaciones y seguros contratados.
             </p>
         </div>
-
+        <InsuranceStats />
         <InsuranceTable />
+        <InsuranceCardsList />
     </div>
 </template>

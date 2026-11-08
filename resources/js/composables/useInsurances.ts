@@ -33,15 +33,13 @@ export function useInsurances(filters: InsurancesFilters = {}) {
 
 export function useInsurancesInfinite(filters: InfiniteInsurancesFilters = {}) {
   return useInfiniteQuery<PaginatedResponse<Insurance>>({
-    queryKey: ['insurances-infinite', filters.search, filters.status, filters.sort, filters.direction],
+    queryKey: ['insurances-infinite', filters.search, filters.status],
     queryFn: async ({ pageParam }) => {
       const { data } = await api.get<PaginatedResponse<Insurance>>('/insurances', {
         params: {
           page: pageParam,
           search: filters.search?.value || undefined,
           status: filters.status?.value || undefined,
-          sort: filters.sort?.value || undefined,
-          direction: filters.direction?.value || undefined,
         },
       })
       return data

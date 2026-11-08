@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, useRoute } from "vue-router";
-import NavLink from "./NavLink.vue";
-import AppButton from "./ui/AppButton.vue";
+import AppButton from "../ui/AppButton.vue";
 
 const route = useRoute();
 </script>

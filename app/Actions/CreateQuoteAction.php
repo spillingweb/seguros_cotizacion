@@ -6,7 +6,7 @@ use App\DTOs\QuoteResult;
 use App\Enums\InsuranceStatus;
 use App\Models\Insurance;
 
-class CreateInsuranceAction
+class CreateQuoteAction
 {
     public function execute(array $validated, QuoteResult $result): Insurance
     {

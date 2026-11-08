@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CalculateQuoteAction;
-use App\Actions\CreateInsuranceAction;
+use App\Actions\ContractInsuranceAction;
+use App\Actions\CreateQuoteAction;
+use App\Actions\ExportInsurancePdfAction;
 use App\Enums\InsuranceStatus;
 use App\Http\Requests\StoreQuoteRequest;
 use App\Http\Resources\InsuranceResource;
@@ -17,7 +19,9 @@ class QuoteController extends Controller
 {
     public function __construct(
         private readonly CalculateQuoteAction $calculateQuote,
-        private readonly CreateInsuranceAction $createInsurance,
+        private readonly CreateQuoteAction $createQuote,
+        private readonly ContractInsuranceAction $contractInsurance,
+        private readonly ExportInsurancePdfAction $exportInsurancePdf,
     ) {}
 
     public function store(StoreQuoteRequest $request): JsonResponse
@@ -28,7 +32,7 @@ class QuoteController extends Controller
             $request->validated('destination_region'),
         );
 
-        $insurance = $this->createInsurance->execute($request->validated(), $result);
+        $insurance = $this->createQuote->execute($request->validated(), $result);
 
         return response()->json(new InsuranceResource($insurance), 201);
     }
@@ -47,19 +51,13 @@ class QuoteController extends Controller
             );
         }
 
-        $insurance->update([
-            'status'        => InsuranceStatus::Contracted,
-            'contracted_at' => now(),
-        ]);
+        $insurance = $this->contractInsurance->execute($insurance);
 
         return response()->json(new InsuranceResource($insurance->fresh()));
     }
 
     public function pdf(Insurance $insurance): Response
     {
-        $pdf = Pdf::loadView('pdf.quote', ['insurance' => $insurance])
-            ->setPaper('a4');
-
-        return $pdf->download("cotizacion-{$insurance->id}.pdf");
+        return $this->exportInsurancePdf->execute($insurance);
     }
 }

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useInsuranceStore } from "@/stores/insurance";
-import QuoteForm from "@/components/QuoteForm.vue";
-import QuoteSummary from "@/components/QuoteSummary.vue";
 import { Sparkles } from "@lucide/vue";
+import QuoteForm from "@/components/quotes-view/QuoteForm.vue";
+import QuoteSummaryFinal from "@/components/quotes-view/QuoteSummaryFinal.vue";
 
 const store = useInsuranceStore();
 const showForm = ref(!store.currentQuote);
@@ -38,7 +38,7 @@ function onNewQuote() {
             enter-to-class="opacity-100 translate-y-0" leave-active-class="transition-all duration-200"
             leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 -translate-y-2" mode="out-in">
             <QuoteForm v-if="showForm" @quoted="onQuoted" />
-            <QuoteSummary v-else-if="insurance" :insurance="insurance" @new-quote="onNewQuote" @contracted="() => { }" />
+            <QuoteSummaryFinal v-else-if="insurance" :insurance="insurance" @new-quote="onNewQuote" @contracted="() => { }" />
         </Transition>
     </div>
 </template>

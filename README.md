@@ -1,4 +1,4 @@
-# Seguro de Viaje — Prueba Técnica
+# Seguro de Viaje
 
 Sistema de cotización y venta de seguro de viaje. Laravel 12 + Vue 3 (TypeScript).
 
@@ -75,14 +75,13 @@ La aplicación estará disponible en **http://localhost:8080**
 
 ---
 
-## Ejecutar pruebas
+## Pruebas Automatizadas (PEST)
+
+El proyecto incluye pruebas automatizadas para validar la lógica de negocio y endpoints utilizando **PEST**:
 
 ```bash
-# SQLite en memoria (configuración por defecto)
-./vendor/bin/pest
-
-# Con reporte de cobertura
-./vendor/bin/pest --coverage
+# Ejecutar la suite de pruebas
+php artisan test
 ```
 
 ---
@@ -96,31 +95,33 @@ La lógica de negocio vive fuera de los controladores:
 ```
 app/
 ├── Actions/
-│   ├── CalculateQuoteAction.php   ← días × $3 + recargo por región
-│   └── CreateInsuranceAction.php  ← persiste cotización en base de datos
+│   ├── CalculateQuoteAction.php        ← días × $3 + recargo por región
+│   └── ContractInsuranceAction.php     ← marca el seguro como contratado y registra fecha
+│   └── CreateQuoteAction.php           ← persiste cotización en base de datos
+│   └── ExportInsurancePdfAction.php    ← genera y descarga el PDF de la cotización
 ├── DTOs/
-│   └── QuoteResult.php            ← objeto de valor inmutable (readonly)
+│   └── QuoteResult.php                 ← objeto de valor inmutable (readonly)
 ├── Enums/
-│   └── InsuranceStatus.php        ← quoted | contracted + label en español
-├── Exceptions/
-│   └── CountryServiceException.php
+│   └── InsuranceStatus.php             ← quoted | contracted + label en español
+│   └── RegionSurcharge.php             ← tabla de porcentajes de recargo por región
 ├── Http/
-│   ├── Controllers/               ← delegan a Actions/Services, sin lógica propia
+│   ├── Controllers/                    ← delegan a Actions/Services, sin lógica propia
 │   ├── Requests/
-│   │   └── StoreQuoteRequest.php  ← validación con mensajes en español
+│   │   └── StoreQuoteRequest.php       ← validación con mensajes en español
 │   └── Resources/
-│       └── InsuranceResource.php  ← contrato de respuesta JSON consistente
+│       └── InsuranceResource.php       ← contrato de respuesta JSON consistente
 ├── Models/
 │   └── Insurance.php
 └── Services/
-    └── CountryService.php         ← HTTP externo + caché 24 h + manejo de errores
+    └── CountryService.php              ← HTTP externo + caché 24 h + manejo de errores
+    └── InsuranceService.php            ← consultas, filtros, paginación y estadísticas
 ```
 
-**Actions** (un solo propósito, fáciles de testear unitariamente) vs **Services** (solo para integraciones externas con estado — HTTP, caché).
+**Actions** (un solo propósito, fáciles de testear unitariamente) vs **Services** (lectura de datos, filtros, paginación e integraciones externas con estado — HTTP/caché).
 
 ### Integración con REST Countries
 
-`CountryService` consulta `countries.dev/countries` y cachea la respuesta **24 horas** (`Cache::remember`). Maneja: timeout 10 s, errores 5xx, respuestas no-array, y cualquier excepción de red — todo envuelto en `CountryServiceException`. Además normaliza el contrato para el frontend e incluye el `surcharge_percentage` por región. El frontend cachea también 24 h con Tanstack Query.
+`CountryService` consulta `countries.dev/countries` y cachea la respuesta **24 horas** (`Cache::remember`). Maneja: timeout 10 s, errores 5xx, respuestas no-array, y cualquier excepción de red con `RuntimeException`, manteniendo la capa de negocio simple. Además normaliza el contrato para el frontend e incluye el `surcharge_percentage` por región. El frontend cachea también 24 h con Tanstack Query.
 
 ### Lógica de precios
 
@@ -141,29 +142,33 @@ Total = días × $3 + (días × $3 × recargo_región)
 
 ```
 resources/js/
-├── app.ts                       ← entrada principal (Vue + plugins)
-├── router/index.ts              ← Vue Router: rutas SPA
+├── App.vue                    ← raíz de la aplicación Vue
+├── app.ts                    ← entrada principal (Vue + plugins)
+├── env.d.ts                  ← tipos globales para Vite/Vue
+├── router/
+│   └── index.ts              ← Vue Router: rutas SPA
 ├── stores/
-│   └── insurance.ts             ← Pinia: cotización activa en memoria
+│   └── insurance.ts          ← Pinia: cotización activa en memoria
 ├── composables/
-│   ├── useCountries.ts          ← Tanstack Query: GET /api/countries (caché 24h)
-│   ├── useInsurances.ts         ← Tanstack Query: lista paginada + infinite scroll + mutations
-│   └── useQuoteForm.ts          ← Tanstack Form: estado, submit y sync de errores backend
+│   ├── useCountries.ts       ← Tanstack Query: GET /api/countries
+│   ├── useInsurances.ts      ← Tanstack Query + infinite scroll + mutations
+│   └── useQuoteForm.ts       ← Tanstack Form + validación y submit
 ├── schemas/
-│   └── quoteFormSchema.ts       ← Zod: reglas del formulario de cotización
+│   └── quoteFormSchema.ts    ← Zod: reglas del formulario de cotización
 ├── lib/
-│   ├── api.ts                   ← instancia Axios configurada
-│   └── utils.ts                 ← helpers de fecha, moneda y validación
+│   ├── api.ts                ← instancia Axios configurada
+│   └── utils.ts              ← helpers de fecha y moneda
+├── types/
+│   └── index.ts              ← tipos compartidos del dominio
 ├── views/
-│   ├── QuoteView.vue            ← página de cotización
-│   └── InsurancesView.vue       ← página de gestión de seguros
+│   ├── QuoteView.vue         ← página de cotización
+│   └── InsurancesView.vue    ← página de gestión de seguros
 └── components/
-    ├── AppHeader.vue            ← nav principal con aria-current
-    ├── NavLink.vue              ← enlace de navegación activo/inactivo
-    ├── QuoteForm.vue            ← formulario completo + validación de campos
-    ├── QuoteSummary.vue         ← resumen de cotización + contratar
-    ├── InsuranceTable.vue       ← tabla desktop (paginada) + tarjetas mobile (infinite scroll)
-    └── ui/                      ← AppButton, AppInput, CountrySelect, ErrorMessage, StatusBadge, …
+    ├── header/               ← navegación principal
+    ├── footer/               ← footer global
+    ├── quotes-view/          ← formulario, resumen y cards de cotización
+    ├── insurance-view/       ← listado, estadísticas y tabla de seguros
+    └── ui/                   ← componentes reutilizables (botones, inputs, selects, dialogs, etc.)
 ```
 
 **Tanstack Query**: gestiona caché, estados de carga, deduplicación e invalidación automática al crear/contratar. No es necesario manejar estado de loading manualmente.
@@ -181,7 +186,7 @@ resources/js/
 | Decisión | Razón |
 |----------|-------|
 | Actions pattern | Un propósito por clase, testeable unitariamente sin HTTP |
-| DTOs `readonly` | Evitan mutación accidental de resultados de negocio |
+| DTO `QuoteResult` | Evita pasar 4 valores escalares sueltos entre acciones |
 | Enum `InsuranceStatus` | Type-safety, casting Eloquent automático, labels en español |
 | Tanstack Query | Caché automático, deduplicación, estados declarativos — evita boilerplate de Axios |
 | `useInfiniteQuery` (infinite scroll) | Acumula páginas en mobile sin recargar; sentinel + IntersectionObserver evita polling |

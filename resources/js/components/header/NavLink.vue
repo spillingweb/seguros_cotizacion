@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, useRoute } from "vue-router";
-import { cn } from "../lib/utils";
+import { cn } from "../../lib/utils";
 
 interface NavLinkProps {
     to: string;

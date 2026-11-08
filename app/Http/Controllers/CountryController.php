@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\CountryServiceException;
 use App\Services\CountryService;
 use Illuminate\Http\JsonResponse;
 
@@ -16,7 +15,7 @@ class CountryController extends Controller
             $countries = $this->countryService->getCountries();
 
             return response()->json(['data' => $countries]);
-        } catch (CountryServiceException $e) {
+        } catch (\Throwable $e) {
             return response()->json(
                 ['message' => $e->getMessage()],
                 503,

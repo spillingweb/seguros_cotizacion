@@ -17,7 +17,7 @@ const route = useRoute();
                 aria-label="Ir a inicio — Seguro de Viaje"
             >
                 <img
-                    src="../../images/gestion-segura-logo-light.png"
+                    src="../../../images/gestion-segura-logo-light.png"
                     alt="Seguro de Viaje"
                     class="h-12 w-auto"
                 />
