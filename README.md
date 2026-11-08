@@ -18,7 +18,7 @@ Sistema de cotización y venta de seguro de viaje. Laravel 12 + Vue 3 (TypeScrip
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/spillingweb/seguros_cotizacion.git seguro_viaje && cd seguro_viaje
+git clone https://github.com/spillingweb/seguros_cotizacion.git && cd seguro_viaje
 
 # 2. Instalar dependencias
 composer install
