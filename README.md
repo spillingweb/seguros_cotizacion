@@ -12,7 +12,7 @@ Sistema de cotización y venta de seguro de viaje. Laravel 12 + Vue 3 (TypeScrip
 | npm | 10+ |
 | MySQL | 8.0 (o Docker) |
 
----
+
 
 ## Instalación local (sin Docker)
 
@@ -71,7 +71,7 @@ php artisan serve
 
 La aplicación estará disponible en **http://localhost:8000**
 
----
+
 
 ## Instalación con Docker
 
