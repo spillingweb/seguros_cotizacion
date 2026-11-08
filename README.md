@@ -131,7 +131,7 @@ La aplicación estará disponible en **http://localhost:8080**
 
 > El `.env.example` ya está preconfigurado para Docker (host `mysql`, puerto 3306).
 
----
+
 
 ## Pruebas Automatizadas (PEST)
 
@@ -142,11 +142,11 @@ El proyecto incluye pruebas automatizadas para validar la lógica de negocio y e
 php artisan test
 ```
 
----
+
 
 ## Arquitectura
 
-### Backend — Actions + Services
+### Backend - estructura clásica de Laravel con Actions y Services
 
 La lógica de negocio vive fuera de los controladores:
 
@@ -200,7 +200,7 @@ Total = días × $3 + (días × $3 × recargo_región)
 
 ```
 resources/js/
-├── App.vue                    ← raíz de la aplicación Vue
+├── App.vue                   ← raíz de la aplicación Vue
 ├── app.ts                    ← entrada principal (Vue + plugins)
 ├── env.d.ts                  ← tipos globales para Vite/Vue
 ├── router/
@@ -224,8 +224,8 @@ resources/js/
 └── components/
     ├── header/               ← navegación principal
     ├── footer/               ← footer global
-    ├── quotes-view/          ← formulario, resumen y cards de cotización
-    ├── insurance-view/       ← listado, estadísticas y tabla de seguros
+    ├── quote/                ← formulario, resumen y cards de cotización
+    ├── insurances/           ← listado, estadísticas y tabla de seguros
     └── ui/                   ← componentes reutilizables (botones, inputs, selects, dialogs, etc.)
 ```
 
@@ -237,7 +237,7 @@ resources/js/
 
 **Pinia**: almacena la cotización activa en memoria para que el resumen persista sin recargar datos innecesariamente.
 
----
+
 
 ## Decisiones técnicas
 
@@ -255,7 +255,7 @@ resources/js/
 | Docker multi-servicio | Entorno reproducible; MySQL 8 + Nginx + PHP-FPM |
 | GitHub Actions CI | Valida tests PEST + TypeScript + Vite build en cada push |
 
----
+
 
 ## Mejoras futuras
 

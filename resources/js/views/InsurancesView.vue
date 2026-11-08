@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import InsuranceCardsList from "@/components/insurance-view/InsuranceCardsList.vue";
-import InsuranceStats from "@/components/insurance-view/InsuranceStats.vue";
-import InsuranceTable from "@/components/insurance-view/InsuranceTable.vue";
+import InsuranceCardsList from "@/components/insurances/InsuranceCardsList.vue";
+import InsuranceStats from "@/components/insurances/InsuranceStats.vue";
+import InsuranceTable from "@/components/insurances/InsuranceTable.vue";
 import { FileText } from "@lucide/vue";
 </script>
 

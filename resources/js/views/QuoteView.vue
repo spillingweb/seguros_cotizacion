@@ -2,8 +2,8 @@
 import { ref, computed } from "vue";
 import { useInsuranceStore } from "@/stores/insurance";
 import { Sparkles } from "@lucide/vue";
-import QuoteForm from "@/components/quotes-view/QuoteForm.vue";
-import QuoteSummaryFinal from "@/components/quotes-view/QuoteSummaryFinal.vue";
+import QuoteForm from "@/components/quote/QuoteForm.vue";
+import QuoteSummaryFinal from "@/components/quote/QuoteSummaryFinal.vue";
 
 const store = useInsuranceStore();
 const showForm = ref(!store.currentQuote);
