@@ -196,9 +196,9 @@ tests/                                  ← Tests para probar las apis y los Act
 
 **Actions** (un solo propósito, fáciles de testear unitariamente) vs **Services** (lectura de datos, filtros, paginación e integraciones externas con estado — HTTP/caché).
 
-### Integración con REST Countries
+### Integración con countries.dev
 
-`CountryService` consulta `countries.dev/countries` y cachea la respuesta **24 horas** (`Cache::remember`). Maneja: timeout 10 s, errores 5xx, respuestas no-array, y cualquier excepción de red con `RuntimeException`, manteniendo la capa de negocio simple. Además normaliza el contrato para el frontend e incluye el `surcharge_percentage` por región. El frontend cachea también 24 h con Tanstack Query.
+No se ha usadod el REST countries ya que se necesita un plan pagado para acceder a la api si se quiere un listado de más que 100 países. `CountryService` consulta `countries.dev/countries` y cachea la respuesta **24 horas** (`Cache::remember`). Maneja: timeout 10 s, errores 5xx, respuestas no-array, y cualquier excepción de red con `RuntimeException`, manteniendo la capa de negocio simple. Además normaliza el contrato para el frontend e incluye el `surcharge_percentage` por región. El frontend cachea también 24 h con Tanstack Query.
 
 ### Lógica de precios
 
