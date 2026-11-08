@@ -87,12 +87,12 @@ git clone https://github.com/spillingweb/seguros_cotizacion.git
 cd seguros_cotizacion
 ```
 
-3. Instalar dependencias de PHP
+3. Instalar dependencias de PHP localmente
 ```bash
 composer install
 ```
 
-4. Instalar dependencias de Node.js
+4. Instalar dependencias de Node.js localment
 ```bash
 npm install
 ```
