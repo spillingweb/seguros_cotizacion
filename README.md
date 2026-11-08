@@ -16,36 +16,58 @@ Sistema de cotización y venta de seguro de viaje. Laravel 12 + Vue 3 (TypeScrip
 
 ## Instalación local (sin Docker)
 
+1. Clonar el repositorio
 ```bash
-# 1. Clonar el repositorio
-git clone https://github.com/spillingweb/seguros_cotizacion.git && cd seguros_cotizacion
+git clone https://github.com/spillingweb/seguros_cotizacion.git
+```
 
-# 2. Instalar dependencias
+2. Entrar al directorio del proyecto
+```bash
+cd seguros_cotizacion
+```
+
+3. Instalar dependencias de PHP
+```bash
 composer install
+```
+
+4. Instalar dependencias de Node.js
+```bash
 npm install
+```
 
-# 3. Configurar entorno
+5. Configurar el archivo de entorno
+```bash
 cp .env.example .env
-# Editar .env: ajustar DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD
-# y cambiar APP_URL=http://localhost:8000
+```
 
-# 4. Generar clave de la aplicación
+> **Nota:** Editar el archivo `.env` para ajustar `DB_HOST=127.0.0.1`, tus credenciales de base de datos y `APP_URL=http://localhost:8000`.
+
+6. Generar clave de la aplicación
+```bash
 php artisan key:generate
+```
 
-# 5. Ejecutar migraciones
-php artisan migrate
+5. Ejecutar migraciones y seeders
+```bash
+php artisan migrate --seed
+```
 
-# 6. (Opcional) Cargar datos de prueba en español
-php artisan db:seed
-
-# 7. Compilar assets frontend
+6. Compilar assets frontend
+```bash
 npm run build
-# O en modo desarrollo con HMR:
-# npm run dev
+```
 
-# 8. Levantar el servidor
+(O en modo desarrollo con HMR:)
+```bash
+npm run dev
+```
+
+7. Levantar el servidor
+```bash
 php artisan serve
 ```
+*(Si tu entorno local de Windows no te permite ejecutar `php artisan serve`, prueba con `php -S 127.0.0.1:8000 -t public`).*
 
 La aplicación estará disponible en **http://localhost:8000**
 
@@ -53,20 +75,56 @@ La aplicación estará disponible en **http://localhost:8000**
 
 ## Instalación con Docker
 
+> **Requisito previo:** Asegúrate de tener **Docker Desktop** (o el servicio/daemon de Docker) instalado y **en ejecución** en tu sistema antes de continuar.
+
+1. Clonar el proyecto de GitHub
 ```bash
-# 1. Clonar e instalar dependencias localmente (necesario para el build)
-git clone <url> seguro_viaje && cd seguro_viaje
+git clone https://github.com/spillingweb/ seguros_cotizacion
+```
+
+2. Navegar al directorio del proyecto
+```bash
+cd seguros_cotizacion
+```
+
+3. Instalar dependencias de PHP
+```bash
 composer install
-npm install && npm run build
+```
 
-# 2. Levantar contenedores
+4. Instalar dependencias de Node.js
+```bash
+npm install
+```
+
+5. Compilar assets
+```bash
+npm run build
+```
+
+6. Levantar contenedores
+```bash
 docker compose up -d --build
+```
 
-# 3. Configurar
+7. Configurar el archivo .env dentro del contenedor (ya está configurado para Docker)
+```bash
 docker compose exec app cp .env.example .env
+```
+
+8. Generar clave de la aplicación en Docker
+```bash
 docker compose exec app php artisan key:generate
-docker compose exec app php artisan migrate
-docker compose exec app php artisan db:seed
+```
+
+9. Ejecutar migraciones y seeders en Docker
+```bash
+docker compose exec app php artisan migrate --seed
+```
+
+10. (Opcional) Correr el servidor Vite localmente para ver actualizaciones en vivo
+```bash
+npm run dev
 ```
 
 La aplicación estará disponible en **http://localhost:8080**
