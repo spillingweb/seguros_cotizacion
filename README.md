@@ -137,8 +137,8 @@ La aplicación estará disponible en **http://localhost:8080**
 
 El proyecto incluye pruebas automatizadas para validar la lógica de negocio y endpoints utilizando **PEST**:
 
+### Ejecutar la suite de pruebas
 ```bash
-# Ejecutar la suite de pruebas
 php artisan test
 ```
 
@@ -173,6 +173,25 @@ app/
 └── Services/
     └── CountryService.php              ← HTTP externo + caché 24 h + manejo de errores
     └── InsuranceService.php            ← consultas, filtros, paginación y estadísticas
+
+database/
+├── factories/
+│   └── InsuranceFactory.php            ← Lá fábrica para crear contrataciones dummy con datos en español
+├── migrations/                         ← Donde se crean las tablas de la base de datos
+└── seeders/
+    ├── DatabaseSeeder.php              
+    └── InsuranceSeeder.php             ← Donde se crea la dummy data basada en el InsuranceFactory
+
+tests/                                  ← Tests para probar las apis y los Actions.
+├── Feature/Api
+│   ├── InsuranceTest.php         
+│   └── QuoteTest.php                
+└── Unit/Actions                        
+    ├── CalculateQuoteActionTest.php 
+    ├── ContractInsuranceActionTest.php 
+    ├── CreateQuoteActionTest.php
+    └── ExportInsurancePdfActionTest.php
+
 ```
 
 **Actions** (un solo propósito, fáciles de testear unitariamente) vs **Services** (lectura de datos, filtros, paginación e integraciones externas con estado — HTTP/caché).
@@ -197,6 +216,7 @@ Total = días × $3 + (días × $3 × recargo_región)
 | Oceania | 25% |
 
 ### Frontend — Vue 3 + TypeScript
+Para la aqruitectura del frontend he separado la lógica del negocio en el directorio de composables. Los componentes están manejables, y categorizados por features. Un directorio ui para componentes de Shadcn UI y otros reutilizables por la app.
 
 ```
 resources/js/
@@ -237,7 +257,7 @@ resources/js/
 
 **Pinia**: almacena la cotización activa en memoria para que el resumen persista sin recargar datos innecesariamente.
 
-
+**Shadcn UI y Tailwind CSS 4**: uso componentes de Shadcn UI con Tailwind para mejorar accesibilidad y facilitar el proceso de desarollo
 
 ## Decisiones técnicas
 
@@ -245,7 +265,7 @@ resources/js/
 |----------|-------|
 | Actions pattern | Un propósito por clase, testeable unitariamente sin HTTP |
 | DTO `QuoteResult` | Evita pasar 4 valores escalares sueltos entre acciones |
-| Enum `InsuranceStatus` | Type-safety, casting Eloquent automático, labels en español |
+| Enums `InsuranceStatus` y `RegionSurcharge` | Type-safety, casting Eloquent automático, labels en español, y un lugar central parala data del recargo por region |
 | Tanstack Query | Caché automático, deduplicación, estados declarativos — evita boilerplate de Axios |
 | `useInfiniteQuery` (infinite scroll) | Acumula páginas en mobile sin recargar; sentinel + IntersectionObserver evita polling |
 | Tanstack Form | Estado y validación del formulario con API declarativa y tipada |
