@@ -22,7 +22,7 @@ const { variant = 'default', size = 'lg', loading = false, type = 'button' } = d
     :variant="variant"
     :size="size"
   >
-    <Spinner v-if="loading" class="size-4" />
+    <Spinner v-if="loading" class="size-4 text-current" />
     <slot />
   </Button>
 </template>
