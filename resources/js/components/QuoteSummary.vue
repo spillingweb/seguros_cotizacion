@@ -91,25 +91,20 @@ function formatDate(dateStr: string): string {
 
         <!-- Detalles en grid -->
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <!-- Mensaje de seguro contratado -->
             <template v-if="insurance.status === 'contracted'">
-                <div
-                    class="col-span-full flex items-center gap-2 text-green-800"
-                >
-                    <span class="rounded-full bg-green-100 p-1"
-                        ><Check class="size-4" aria-hidden="true"
-                    /></span>
-                    <span class="text-base font-semibold"
-                        >¡Seguro contratado exitosamente!</span
-                    >
+                <div class="col-span-full flex items-center gap-2 text-green-800">
+                    <span class="rounded-full bg-green-100 p-1">
+                        <Check class="size-4" aria-hidden="true" />
+                    </span>
+                    <span class="text-base font-semibold">¡Seguro contratado exitosamente!</span>
                 </div>
             </template>
 
-            <div class="rounded-md bg-muted border p-4 flex gap-4 items-start">
+            <div class="rounded-md bg-muted border p-6 flex gap-4 items-start">
                 <User2 class="size-10 text-primary" />
                 <div class="flex flex-col justify-center">
-                    <div
-                        class="text-xs font-semibold uppercase tracking-wide text-primary mb-1"
-                    >
+                    <div class="text-xs font-semibold uppercase tracking-wide text-primary mb-1">
                         Asegurado
                     </div>
                     <div class="text-lg font-semibold">
@@ -123,12 +118,10 @@ function formatDate(dateStr: string): string {
                     </div>
                 </div>
             </div>
-            <div class="rounded-md bg-muted border p-4 flex gap-4 items-start">
+            <div class="rounded-md bg-muted border p-6 flex gap-4 items-start">
                 <MapPin class="size-10 text-primary" />
                 <div class="flex flex-col justify-center">
-                    <div
-                        class="text-xs font-semibold uppercase tracking-wide text-primary mb-1"
-                    >
+                    <div class="text-xs font-semibold uppercase tracking-wide text-primary mb-1">
                         Destino
                     </div>
                     <div class="text-lg font-semibold">
@@ -138,48 +131,38 @@ function formatDate(dateStr: string): string {
                         {{ insurance.destination_country }}
                     </div>
                     <div class="text-sm text-muted-foreground">
-                        {{ insurance.destination_region }}
+                        {{ insurance.destination_region }} - recargo {{ insurance.surcharge_percentage }}%
                     </div>
                 </div>
             </div>
-            <div
-                class="rounded-md bg-muted border p-4 text-muted-foreground flex gap-4 items-start"
-            >
+            <div class="rounded-md bg-muted border p-6 text-muted-foreground flex gap-4 items-start">
                 <Calendar class="size-10 text-primary" />
-                <div class="flex flex-col justify-center">
-                    <div
-                        class="text-xs font-semibold uppercase tracking-wide text-primary mb-1"
-                    >
+                <div class="flex flex-col justify-center text-balance">
+                    <div class="text-xs font-semibold uppercase tracking-wide text-primary mb-1">
                         Fechas del viaje
                     </div>
                     <div class="text-sm">
                         Salida:
-                        <span class="font-medium">{{
+                        <span class="font-semibold">{{
                             formatDate(insurance.departure_date)
                         }}</span>
                     </div>
                     <div class="text-sm">
                         Regreso:
-                        <span class="font-medium">{{
+                        <span class="font-semibold">{{
                             formatDate(insurance.return_date)
                         }}</span>
                     </div>
                     <div class="text-sm">
                         Duración:
-                        <span class="font-medium"
-                            >{{ insurance.days_count }} días</span
-                        >
+                        <span class="font-semibold">{{ insurance.days_count }} días</span>
                     </div>
                 </div>
             </div>
-            <div
-                class="rounded-md bg-primary text-white p-4 flex gap-4 items-start"
-            >
+            <div class="rounded-md bg-primary text-white p-6 flex gap-4 items-start">
                 <CreditCardCheck class="size-10 text-white" />
                 <div class="flex flex-col justify-center">
-                    <div
-                        class="text-xs font-semibold uppercase tracking-wide text-blue-100 mb-1"
-                    >
+                    <div class="text-xs font-semibold uppercase tracking-wide text-blue-100 mb-1">
                         Valor del seguro
                     </div>
                     <div class="text-2xl font-bold">
@@ -194,16 +177,10 @@ function formatDate(dateStr: string): string {
         </div>
 
         <!-- Error de contratación -->
-        <ErrorMessage v-if="contractError" :error="contractError">
-            {{ contractError }}
-        </ErrorMessage>
+        <ErrorMessage v-if="contractError" :error="contractError" />
 
         <!-- Acciones -->
-        <div
-            class="flex flex-wrap gap-3 items-center"
-            role="group"
-            aria-label="Acciones de la cotización"
-        >
+        <div class="flex flex-wrap gap-3 items-center" role="group" aria-label="Acciones de la cotización">
             <div class="flex-1">
                 <AppButton variant="ghost" @click="handleNewQuote">
                     <Undo2 class="size-4" aria-hidden="true" />
@@ -212,13 +189,8 @@ function formatDate(dateStr: string): string {
             </div>
 
             <AppButton asChild variant="secondary">
-                <a
-                    :href="`/api/quotes/${insurance.id}/pdf`"
-                    target="_blank"
-                    rel="noopener"
-                    :aria-label="`Descargar PDF de la cotización ${insurance.id}`"
-                    class="flex items-center gap-2"
-                >
+                <a :href="`/api/quotes/${insurance.id}/pdf`" target="_blank" rel="noopener"
+                    :aria-label="`Descargar PDF de la cotización ${insurance.id}`" class="flex items-center gap-2">
                     <Download class="size-4 hidden sm:inline" aria-hidden="true" />
                     Descargar PDF
                 </a>
@@ -236,8 +208,7 @@ function formatDate(dateStr: string): string {
                         <DialogHeader>
                             <DialogTitle>
                                 ¿Estás seguro de que deseas contratar este
-                                seguro?</DialogTitle
-                            >
+                                seguro?</DialogTitle>
                             <DialogDescription>
                                 Si confirmas, se procederá con la contratación
                                 del seguro.
@@ -255,10 +226,8 @@ function formatDate(dateStr: string): string {
                                     Cancelar
                                 </AppButton>
                             </DialogClose>
-                            <AppButton
-                                :loading="contractMutation.isPending.value"
-                                @click="confirmContract(insurance.id)"
-                            >
+                            <AppButton :loading="contractMutation.isPending.value"
+                                @click="confirmContract(insurance.id)">
                                 Confirmar
                             </AppButton>
                         </DialogFooter>

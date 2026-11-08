@@ -12,15 +12,19 @@ const route = useRoute();
 
             <!-- Navegación -->
             <ul class="flex sm:order-last">
-                <AppButton asChild variant="link" class="text-primary-foreground">
-                    <RouterLink to="/">Cotizar</RouterLink>
-                </AppButton>
-                <AppButton asChild variant="link" class="text-primary-foreground">
-                    <RouterLink to="/seguros">Contrataciones</RouterLink>
-                </AppButton>
+                <li>
+                    <AppButton asChild variant="link" class="text-primary-foreground">
+                        <RouterLink to="/">Cotizar</RouterLink>
+                    </AppButton>
+                </li>
+                <li>
+                    <AppButton asChild variant="link" class="text-primary-foreground">
+                        <RouterLink to="/seguros">Contrataciones</RouterLink>
+                    </AppButton>
+                </li>
             </ul>
 
-            <p class="text-center text-sm text-balance">
+            <p class="text-center text-xs text-balance">
                 &copy; 2024 Gestión Segura. Todos los derechos reservados.
             </p>
         </div>

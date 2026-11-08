@@ -117,7 +117,7 @@ const selectedLabel = computed(() => {
             </SelectContent>
         </Select>
         <FieldLabel
-            class="absolute w-fit! px-1 text-muted-foreground -top-1.5 left-2 bg-white text-xs"
+            class="absolute w-fit! px-1 text-muted-foreground -top-2 left-2 bg-white text-xs"
         >
             {{ label }}
             <span v-if="required" aria-label="campo requerido">*</span>

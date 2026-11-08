@@ -20,6 +20,7 @@ import InputGroupInput from './ui/input-group/InputGroupInput.vue'
 import InputGroupAddon from './ui/input-group/InputGroupAddon.vue'
 import ErrorMessage from './ui/ErrorMessage.vue'
 import Card from './ui/card/Card.vue'
+import TableHeadStyled from './ui/TableHeadStyled.vue'
 
 const search = ref('')
 const statusFilter = ref('')
@@ -93,6 +94,17 @@ function formatCurrency(value: number): string {
   return new Intl.NumberFormat('es-EC', { style: 'currency', currency: 'USD' }).format(value)
 }
 
+const columns = [
+  { id: 'first_name', label: 'Nombre' },
+  { id: 'identification_number', label: 'No. de ID' },
+  { id: 'destination_country', label: 'Destino' },
+  { id: 'departure_date', label: 'Salida' },
+  { id: 'return_date', label: 'Retorno' },
+  { id: 'total_amount', label: 'Valor' },
+  { id: 'status', label: 'Estado' },
+  { id: 'created_at', label: 'Creado' }
+]
+
 function toggleSort(column: string) {
   if (sortColumn.value === column) {
     sortDirection.value = sortDirection.value === 'asc' ? 'desc' : ''
@@ -108,17 +120,11 @@ function getSortIcon(column: string) {
   if (sortColumn.value !== column) return ChevronsUpDown
   return sortDirection.value === 'asc' ? ChevronUp : ChevronDown
 }
-
-const statusOptions = [
-  { value: '', label: 'Todos' },
-  { value: 'quoted', label: 'Cotizados' },
-  { value: 'contracted', label: 'Contratados' },
-]
 </script>
 
 <template>
   <!-- Estadísticas -->
-  <div class="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-3">
+  <div class="hidden sm:grid grid-cols-1 gap-4 mb-4 sm:grid-cols-3">
 
     <Card class=" flex-row gap-2 items-center">
       <span class="rounded-md bg-amber-500/15 p-2 text-amber-700">
@@ -161,7 +167,7 @@ const statusOptions = [
   </div>
 
   <!-- Table Section -->
-  <Card>
+  <Card class="max-sm:ring-0 max-sm:shadow-none max-sm:bg-transparent max-sm:p-1">
     <!-- Filtros -->
     <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
       <!-- Búsqueda -->
@@ -176,7 +182,9 @@ const statusOptions = [
             <Search />
           </InputGroupAddon>
           <InputGroupAddon :align="'inline-end'">
-            <AppButton variant="ghost" size="icon-sm" @click="search = ''"><X /></AppButton>
+            <AppButton variant="ghost" size="icon-sm" @click="search = ''">
+              <X />
+            </AppButton>
           </InputGroupAddon>
         </InputGroup>
       </Field>
@@ -203,54 +211,16 @@ const statusOptions = [
       <Table aria-label="Lista de contrataciones de seguro">
         <TableHeader class="bg-muted">
           <TableRow>
-            <TableHead>
-              <button class="flex items-center gap-1 hover:text-foreground transition-colors" @click="toggleSort('first_name')">
-                Cliente
-                <component :is="getSortIcon('first_name')" class="size-3.5" :class="sortColumn === 'first_name' ? 'text-foreground' : 'text-muted-foreground/50'" />
+            <TableHead v-for="column in columns" :key="column.id">
+              <button class="flex items-center gap-1 hover:text-foreground transition-colors"
+                @click="toggleSort(column.id)">
+                {{ column.label }}
+                <component :is="getSortIcon(column.id)" class="size-3.5"
+                  :class="sortColumn === column.id ? 'text-foreground' : 'text-muted-foreground/50'" />
               </button>
             </TableHead>
-            <TableHead>
-              <button class="flex items-center gap-1 hover:text-foreground transition-colors" @click="toggleSort('identification_number')">
-                Identificación
-                <component :is="getSortIcon('identification_number')" class="size-3.5" :class="sortColumn === 'identification_number' ? 'text-foreground' : 'text-muted-foreground/50'" />
-              </button>
-            </TableHead>
-            <TableHead>
-              <button class="flex items-center gap-1 hover:text-foreground transition-colors" @click="toggleSort('destination_country')">
-                Destino
-                <component :is="getSortIcon('destination_country')" class="size-3.5" :class="sortColumn === 'destination_country' ? 'text-foreground' : 'text-muted-foreground/50'" />
-              </button>
-            </TableHead>
-            <TableHead>
-              <button class="flex items-center gap-1 hover:text-foreground transition-colors" @click="toggleSort('departure_date')">
-                Salida
-                <component :is="getSortIcon('departure_date')" class="size-3.5" :class="sortColumn === 'departure_date' ? 'text-foreground' : 'text-muted-foreground/50'" />
-              </button>
-            </TableHead>
-            <TableHead>
-              <button class="flex items-center gap-1 hover:text-foreground transition-colors" @click="toggleSort('return_date')">
-                Regreso
-                <component :is="getSortIcon('return_date')" class="size-3.5" :class="sortColumn === 'return_date' ? 'text-foreground' : 'text-muted-foreground/50'" />
-              </button>
-            </TableHead>
-            <TableHead>
-              <button class="flex items-center gap-1 hover:text-foreground transition-colors" @click="toggleSort('total_amount')">
-                Valor
-                <component :is="getSortIcon('total_amount')" class="size-3.5" :class="sortColumn === 'total_amount' ? 'text-foreground' : 'text-muted-foreground/50'" />
-              </button>
-            </TableHead>
-            <TableHead>
-              <button class="flex items-center gap-1 hover:text-foreground transition-colors" @click="toggleSort('status')">
-                Estado
-                <component :is="getSortIcon('status')" class="size-3.5" :class="sortColumn === 'status' ? 'text-foreground' : 'text-muted-foreground/50'" />
-              </button>
-            </TableHead>
-            <TableHead>
-              <button class="flex items-center gap-1 hover:text-foreground transition-colors" @click="toggleSort('created_at')">
-                Creado
-                <component :is="getSortIcon('created_at')" class="size-3.5" :class="sortColumn === 'created_at' ? 'text-foreground' : 'text-muted-foreground/50'" />
-              </button>
-            </TableHead>
+            <!--<TableHeadStyled v-for="column in columns" :key="column.id" :column="column.id" :label="column.label"
+              v-model:sort-column="sortColumn" v-model:sort-direction="sortDirection" v-model:page="page" /> -->
           </TableRow>
         </TableHeader>
 
@@ -258,7 +228,7 @@ const statusOptions = [
           <TableRow v-for="item in data.data" :key="item.id">
             <!-- Cliente -->
             <TableCell>
-              <div class="text-sm font-medium">{{ item.full_name }}</div>
+              <div class="font-medium">{{ item.full_name }}</div>
               <div class="text-xs text-muted-foreground">{{ item.email }}</div>
             </TableCell>
 
@@ -293,7 +263,7 @@ const statusOptions = [
 
           <!-- No se encontraron registros -->
           <TableRow v-if="data.data.length === 0">
-            <TableCell colspan="8" class="py-12 text-center text-sm text-muted-foreground">
+            <TableCell colspan="8" class="py-12 text-center text-muted-foreground">
               No se encontraron contrataciones.
             </TableCell>
           </TableRow>
@@ -305,7 +275,7 @@ const statusOptions = [
     <div v-if="data && data.meta.last_page > 1"
       class="hidden sm:flex flex-col gap-2 sm:flex-row items-center justify-between" role="navigation"
       aria-label="Paginación">
-      <p class="text-sm text-gray-600">
+      <p class="text-gray-600">
         <span class="hidden sm:inline">Mostrando</span> {{ data.meta.from }}–{{ data.meta.to }} de {{ data.meta.total }}
         registros
       </p>
@@ -314,7 +284,7 @@ const statusOptions = [
           :aria-label="`Página anterior (página ${page - 1})`" @click="page--">
           ← Anterior
         </AppButton>
-        <span class="inline-flex items-center px-3 text-sm text-gray-600" aria-current="page">
+        <span class="inline-flex items-center px-3 text-gray-600" aria-current="page">
           {{ page }} / {{ data.meta.last_page }}
         </span>
         <AppButton variant="outline" size="sm" :disabled="page >= data.meta.last_page"
@@ -329,14 +299,14 @@ const statusOptions = [
     <div v-if="isLoading" class="py-12 hidden sm:flex flex-col gap-2 items-center" aria-live="polite"
       aria-label="Cargando contrataciones">
       <Spinner />
-      <p class="mt-2 text-sm text-muted-foreground">Cargando...</p>
+      <p class="mt-2 text-muted-foreground">Cargando...</p>
     </div>
 
     <!-- Estado de carga / error (mobile) -->
     <div v-if="isLoadingMobile" class="py-12 flex flex-col gap-2 items-center sm:hidden" aria-live="polite"
       aria-label="Cargando contrataciones">
       <Spinner />
-      <p class="mt-2 text-sm text-muted-foreground">Cargando...</p>
+      <p class="mt-2 text-muted-foreground">Cargando...</p>
     </div>
 
     <div v-if="isError" class="justify-self-center flex gap-2 items-center">
@@ -350,27 +320,27 @@ const statusOptions = [
     </div>
 
     <!-- Tarjetas mobile — infinite scroll -->
-    <div class="space-y-3 sm:hidden" aria-label="Lista de contrataciones de seguro" aria-live="polite">
-      <Card v-for="item in allItems" :key="item.id">
+    <div class="space-y-2 sm:hidden" aria-label="Lista de contrataciones de seguro" aria-live="polite">
+      <Card v-for="item in allItems" :key="item.id" class="gap-0">
         <div class="flex items-start justify-between gap-2">
           <div>
-            <p class="text-sm font-semibold text-gray-900">{{ item.full_name }}</p>
-            <p class="text-xs text-muted-foreground">{{ item.identification_number }}</p>
+            <p class="text-base font-semibold">{{ item.full_name }}</p>
+            <p class="text-muted-foreground">ID: {{ item.identification_number }}</p>
           </div>
           <StatusBadge :status="item.status" />
         </div>
-        <div class="text-sm text-gray-700">
+        <div class="text-muted-foreground">
           {{ item.destination_country }} · {{ item.days_count }} días
         </div>
-        <div class="flex items-center justify-between">
-          <span class="text-xs text-muted-foreground">{{ formatDate(item.departure_date) }} — {{
+        <div class="flex items-end justify-between">
+          <span class="text-muted-foreground">{{ formatDate(item.departure_date) }} — {{
             formatDate(item.return_date)
           }}</span>
-          <span class="text-sm font-bold text-blue-700">{{ formatCurrency(item.total_amount) }}</span>
+          <span class="text-xl font-bold text-primary">{{ formatCurrency(item.total_amount) }}</span>
         </div>
       </Card>
 
-      <p v-if="allItems.length === 0 && !isLoadingMobile" class="py-8 text-center text-sm text-gray-400">
+      <p v-if="allItems.length === 0 && !isLoadingMobile" class="py-8 text-center text-gray-400">
         No se encontraron contrataciones.
       </p>
 
@@ -379,6 +349,7 @@ const statusOptions = [
 
       <div v-if="isFetchingNextPage" class="flex flex-col gap-2 items-center">
         <Spinner class="text-center self-center" />
+        <p class="text-muted-foreground">Cargando más contrataciones...</p>
       </div>
 
       <p v-else-if="!hasNextPage && allItems.length > 0" class="py-4 text-center text-xs text-gray-400">
