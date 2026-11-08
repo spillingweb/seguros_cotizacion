@@ -79,7 +79,7 @@ La aplicación estará disponible en **http://localhost:8000**
 
 1. Clonar el proyecto de GitHub
 ```bash
-git clone https://github.com/spillingweb/ seguros_cotizacion
+git clone https://github.com/spillingweb/seguros_cotizacion.git
 ```
 
 2. Navegar al directorio del proyecto
